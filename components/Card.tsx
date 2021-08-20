@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, View, Text, Dimensions } from "react-native";
+import { StyleSheet, View, Text, Dimensions, Image } from "react-native";
 import {
   PanGestureHandler,
   PanGestureHandlerGestureEvent,
@@ -10,17 +10,19 @@ import Animated, {
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
+  withTiming,
 } from "react-native-reanimated";
+import { IProfile } from "../screens/TabTwoScreen";
 
 type Props = {
-  backgroundColor: string;
-  name: string;
-  age: number;
+  profile: IProfile
+  onDismiss?: (profile: IProfile, isLiked: boolean) => void;
 };
 
-export const Card = ({ backgroundColor, name, age }: Props) => {
+export const Card = ({ profile, onDismiss }: Props) => {
   const screen = Dimensions.get("window");
   const translateX = useSharedValue(0);
+  const translateY = useSharedValue(0);
   const rotateX = useSharedValue(0);
   const opacityLike = useSharedValue(0);
   const opacityNope = useSharedValue(0);
@@ -29,6 +31,9 @@ export const Card = ({ backgroundColor, name, age }: Props) => {
     onActive: (event) => {
       //Horizontal
       translateX.value = event.translationX;
+
+      //Vertical
+      translateY.value = (event.translationX * -1) / 3;
 
       //Rotation
       event.translationX < 35 && event.translationX > -35
@@ -40,16 +45,36 @@ export const Card = ({ backgroundColor, name, age }: Props) => {
       event.translationX < 0 ? (opacityNope.value = event.translationX * -1) : null;
     },
     onEnd: () => {
-      translateX.value > screen.width / 1.5 ? /*LIKE*/ translateX.value = screen.width : translateX.value < (-1 * screen.width) / 1.5 ? /*NOPE*/ (translateX.value = -1 * screen.width) : (translateX.value = 0);
-      rotateX.value = 0;
-      opacityLike.value = 0;
-      opacityNope.value = 0;
+      const shouldBeDismissedLike = translateX.value > screen.width / 3;
+      const shouldBeDismissedNope = translateX.value < (-1 * screen.width) /3;
+
+      if (shouldBeDismissedLike) {
+        translateX.value = withTiming(screen.width, undefined, (isFinished) => {
+          if (isFinished && onDismiss) {
+            runOnJS(onDismiss)(profile, true);
+          }
+        })
+      } else if (shouldBeDismissedNope) {
+        translateX.value = withTiming(-1 * screen.width, undefined, (isFinished) => {
+          if (isFinished && onDismiss) {
+            runOnJS(onDismiss)(profile, false);
+          }
+        })
+      } else {
+        rotateX.value = 0;
+        opacityLike.value = 0;
+        opacityNope.value = 0;
+        translateX.value = 0;
+        translateY.value = 0;
+      }
+  
     },
   });
 
   const rStyle = useAnimatedStyle(() => ({
     transform: [
       { translateX: translateX.value },
+      { translateY: translateY.value },
       { rotateZ: rotateX.value + "deg" },
     ],
     position: "absolute",
@@ -67,14 +92,15 @@ export const Card = ({ backgroundColor, name, age }: Props) => {
   return (
     <PanGestureHandler onGestureEvent={panGesture}>
       <Animated.View
-        style={[styles.container, rStyle, { backgroundColor: backgroundColor }]}
+        style={[styles.container, rStyle]}
       >
+        <Image style={styles.image} source={{uri: profile.img_url }} />
         <View style={styles.bottombar}>
           <Animated.View style={[styles.likeOrNope, rLikeStyle]}>
             <Text style={styles.likeText}>Like</Text>
           </Animated.View>
           <Text>
-            {name} {age}
+            {profile.name} {profile.age}
           </Text>
           <Animated.View style={[styles.likeOrNope, rNopeStyle]}>
             <Text style={styles.nopeText}>Nope</Text>
@@ -96,7 +122,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "white",
+    backgroundColor: "pink",
     height: 60,
     width: "100%",
     borderBottomLeftRadius: 20,
@@ -112,12 +138,19 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "green",
     fontWeight: "700",
-    marginLeft: 10
+    marginLeft: 10,
+    textAlign: "center"
   },
   nopeText: {
     fontSize: 18,
     color: "red",
     fontWeight: "700",
-    marginRight: 10
+    marginRight: 10,
+    textAlign: "center"
   },
+  image: {
+    flex: 1,
+    width: "100%",
+    height: "100%"
+  }
 });
