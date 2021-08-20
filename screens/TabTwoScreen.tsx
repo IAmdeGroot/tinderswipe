@@ -1,13 +1,13 @@
 import * as React from "react";
 import { StyleSheet } from "react-native";
 import {Card} from "../components/Card";
-import { Text, View } from "../components/Themed";
+import { View } from "../components/Themed";
 
 export default function TabTwoScreen() {
   return (
     <View style={styles.container}>
-     <Card backgroundColor="red"/>
-     <Card backgroundColor="blue"/>
+     <Card age={29} name="Herr Röd" backgroundColor="red"/>
+     <Card age={31} name="Fru Blå" backgroundColor="blue"/>
     </View>
   );
 }
