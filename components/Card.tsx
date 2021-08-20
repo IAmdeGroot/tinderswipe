@@ -5,8 +5,10 @@ import {
   PanGestureHandlerGestureEvent,
 } from "react-native-gesture-handler";
 import Animated, {
+  runOnJS,
   useAnimatedGestureHandler,
   useAnimatedStyle,
+  useDerivedValue,
   useSharedValue,
 } from "react-native-reanimated";
 
@@ -38,11 +40,7 @@ export const Card = ({ backgroundColor, name, age }: Props) => {
       event.translationX < 0 ? (opacityNope.value = event.translationX * -1) : null;
     },
     onEnd: () => {
-      translateX.value > screen.width / 1.5
-        ? (translateX.value = screen.width)
-        : translateX.value < (-1 * screen.width) / 1.5
-        ? (translateX.value = -1 * screen.width)
-        : (translateX.value = 0);
+      translateX.value > screen.width / 1.5 ? /*LIKE*/ translateX.value = screen.width : translateX.value < (-1 * screen.width) / 1.5 ? /*NOPE*/ (translateX.value = -1 * screen.width) : (translateX.value = 0);
       rotateX.value = 0;
       opacityLike.value = 0;
       opacityNope.value = 0;
@@ -92,17 +90,20 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
     height: "100%",
     justifyContent: "flex-end",
+    borderRadius: 20,
   },
   bottombar: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     backgroundColor: "white",
-    height: 40,
+    height: 60,
     width: "100%",
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20
   },
   likeOrNope: {
-    width: 50,
+    width: 80,
     height: "100%",
     justifyContent: "center",
     alignItems: "center",
@@ -111,10 +112,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "green",
     fontWeight: "700",
+    marginLeft: 10
   },
   nopeText: {
     fontSize: 18,
     color: "red",
     fontWeight: "700",
+    marginRight: 10
   },
 });
