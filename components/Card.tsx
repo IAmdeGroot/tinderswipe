@@ -111,10 +111,9 @@ export const Card = ({ profile, onDismiss }: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: Dimensions.get("window").width,
-    height: "100%",
+    width: "90%",
+    height: "90%",
     justifyContent: "flex-end",
-    borderRadius: 20,
   },
   bottombar: {
     flexDirection: "row",
@@ -123,8 +122,8 @@ const styles = StyleSheet.create({
     backgroundColor: "pink",
     height: 60,
     width: "100%",
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10
   },
   likeOrNope: {
     width: 80,
@@ -149,6 +148,8 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     width: "100%",
-    height: "100%"
+    height: "100%",
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10
   }
 });
