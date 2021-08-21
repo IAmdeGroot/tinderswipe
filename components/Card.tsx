@@ -26,8 +26,13 @@ export const Card = ({ profile, onDismiss }: Props) => {
   const opacityLike = useSharedValue(0);
   const opacityNope = useSharedValue(0);
 
+ 
+
   const panGesture = useAnimatedGestureHandler<PanGestureHandlerGestureEvent>({
     onActive: (event) => {
+      const shouldBeDismissedLike = translateX.value > screen.width / 3;
+      const shouldBeDismissedNope = translateX.value < (-1 * screen.width) /3;
+
       //Horizontal
       translateX.value = event.translationX;
 
@@ -40,8 +45,8 @@ export const Card = ({ profile, onDismiss }: Props) => {
         : null;
 
       //Show like or nope
-      event.translationX > 0 ? (opacityLike.value = event.translationX) : null;
-      event.translationX < 0 ? (opacityNope.value = event.translationX * -1) : null;
+      shouldBeDismissedLike ? (opacityLike.value = event.translationX) : opacityLike.value = 0;
+      shouldBeDismissedNope ? (opacityNope.value = event.translationX * -1) : opacityNope.value = 0;
     },
     onEnd: () => {
       const shouldBeDismissedLike = translateX.value > screen.width / 3;
