@@ -1,7 +1,7 @@
 import * as React from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, Image, Dimensions } from "react-native";
-import Animated, { Easing, EasingNode, Transition, useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
+import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
 import { Card } from "../components/Card";
 import { View } from "../components/Themed";
 
@@ -14,6 +14,7 @@ export interface IProfile {
 }
 
 export default function TabTwoScreen() {
+
   const profile_one: IProfile = {
     id: "1",
     age: 26,
@@ -25,43 +26,75 @@ export default function TabTwoScreen() {
   const profile_two: IProfile = {
     id: "2",
     age: 30,
-    name: "Ms Baba",
+    name: "Ms Granger",
     img_url: "https://images.pexels.com/photos/5368679/pexels-photo-5368679.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
     isLiked: false
   };
 
-  const [profiles, setProfiles] = useState([profile_one, profile_two]);
+   const profile_three: IProfile = {
+    id: "3",
+    age: 26,
+    name: "Ms Smith",
+    img_url: "https://images.pexels.com/photos/1468379/pexels-photo-1468379.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+    isLiked: false
+  };
 
+  const profile_four: IProfile = {
+    id: "4",
+    age: 33,
+    name: "Ms Stone",
+    img_url: "https://images.pexels.com/photos/247297/pexels-photo-247297.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+    isLiked: false
+  };
+
+  const profile_five: IProfile = {
+    id: "5",
+    age: 22,
+    name: "Ms Doe",
+    img_url: "https://images.pexels.com/photos/1161203/pexels-photo-1161203.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+    isLiked: false
+  };
+
+  const dummyProfiles = [profile_one, profile_two, profile_three, profile_four, profile_five]
+  const [profiles, setProfiles] = useState(dummyProfiles);
+
+  const screen = Dimensions.get("window");
   const heartWidth = useSharedValue(0);
   const heartHeight = useSharedValue(0);
   const heartOpacity = useSharedValue(0);
+  const heartTranslateX = useSharedValue(screen.width);
 
   const springConfig : Animated.WithSpringConfig = {
     velocity: 1000,
+  };
+
+  const timingConfig : Animated.WithTimingConfig = {
+    duration: 500,
   };
 
   const rHeartStyle = useAnimatedStyle(() => ({
     opacity: withTiming(heartOpacity.value),
     width: withSpring(heartWidth.value, springConfig),
     height: withSpring(heartHeight.value, springConfig),
+    transform: [{translateX: withTiming(heartTranslateX.value,timingConfig)}]
   }));
-
 
   const onDismiss = useCallback(
     (profile: IProfile, isLiked: boolean) => {
       if (isLiked) {
-        heartHeight.value = 120;
-        heartWidth.value = 120;
+        heartHeight.value = 80;
+        heartWidth.value = 80;
         heartOpacity.value = 1;
+        heartTranslateX.value = -1;
       }
       setProfiles((profiles) => profiles.filter((item) => item.id !== profile.id));
       setTimeout(() => {
         heartOpacity.value = 0;
         heartWidth.value = 0;
         heartHeight.value = 0;
+        heartTranslateX.value = screen.width;
       }, 500);
     },[]);
-
 
   useEffect(() => {
     if (profiles.length == 1) {

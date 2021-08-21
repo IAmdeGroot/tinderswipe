@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, StyleSheet } from 'react-native';
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
+import Animated, {useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { Text, View } from '../components/Themed';
 
 export default function TabThreeScreen() {
@@ -8,12 +8,10 @@ export default function TabThreeScreen() {
 
   const config : Animated.WithSpringConfig = {
     velocity: 500,
-    //easing: Easing.bezier(0.5, 0.01, 0, 1),
   };
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      //width: withTiming(randomWidth.value, config),
       width: withSpring(randomWidth.value, config),
       backgroundColor: randomWidth.value > 200 ? 'blue' : 'red'
     };

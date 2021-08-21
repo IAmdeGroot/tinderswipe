@@ -8,7 +8,6 @@ import Animated, {
   runOnJS,
   useAnimatedGestureHandler,
   useAnimatedStyle,
-  useDerivedValue,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
@@ -33,7 +32,7 @@ export const Card = ({ profile, onDismiss }: Props) => {
       translateX.value = event.translationX;
 
       //Vertical
-      translateY.value = (event.translationX * -1) / 3;
+      translateY.value = (event.translationX * -1) / 4;
 
       //Rotation
       event.translationX < 35 && event.translationX > -35
@@ -67,7 +66,6 @@ export const Card = ({ profile, onDismiss }: Props) => {
         translateX.value = 0;
         translateY.value = 0;
       }
-  
     },
   });
 
