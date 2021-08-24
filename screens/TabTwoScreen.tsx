@@ -19,7 +19,7 @@ export default function TabTwoScreen() {
     id: "1",
     age: 26,
     name: "Ms Doe",
-    img_url: "https://images.pexels.com/photos/5688725/pexels-photo-5688725.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+    img_url: "https://images.pexels.com/photos/38554/girl-people-landscape-sun-38554.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
     isLiked: false
   };
 
@@ -43,7 +43,7 @@ export default function TabTwoScreen() {
     id: "4",
     age: 33,
     name: "Ms Stone",
-    img_url: "https://images.pexels.com/photos/247297/pexels-photo-247297.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+    img_url: "https://images.pexels.com/photos/1239288/pexels-photo-1239288.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
     isLiked: false
   };
 
