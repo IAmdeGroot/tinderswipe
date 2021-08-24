@@ -26,8 +26,6 @@ export const Card = ({ profile, onDismiss }: Props) => {
   const opacityLike = useSharedValue(0);
   const opacityNope = useSharedValue(0);
 
- 
-
   const panGesture = useAnimatedGestureHandler<PanGestureHandlerGestureEvent>({
     onActive: (event) => {
       const shouldBeDismissedLike = translateX.value > screen.width / 3;
